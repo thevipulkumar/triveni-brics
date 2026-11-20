@@ -28,17 +28,23 @@ Open this one file:
 src/main/resources/application.yml
 ```
 
-Change every line under `site:` — phone number, WhatsApp number, address, owner
-name, opening hours, GST number. Everything marked `XXXXX` is a placeholder.
+Every detail the website shows lives under `site:` in that file — phone number, WhatsApp
+number, address, owner name, opening hours, GST number.
 
 ```yaml
 site:
-  phone: "+91 98XXXXXXXX"          # your real mobile number
-  whatsapp: "+91 98XXXXXXXX"       # WhatsApp number (can be the same)
-  address-en: Brick Kiln, XXXXX Road
-  address-hi: ईंट भट्टा, XXXXX रोड
-  # admin-password is set by an environment variable - see section 4
+  phone: "+91 8083217096"                 # done
+  whatsapp: "+91 8083217096"              # done
+  address-en: Sadar Road, Near Panch Mandir
+  address-hi: सदर रोड, पंच मंदिर के पास
+  city-en: Okani Village                  # add district and state here
+  city-hi: ओकनी गाँव                       # add district and state here
+  owner-en: Shri XXXXXXXX                 # put the owner's name, or "" to hide the row
+  owner-hi: श्री XXXXXXXX
 ```
+
+Anything still showing `XXXXX` is waiting to be filled in. Fields set to `""` are hidden
+from the website completely, so leaving the email or second phone number empty is fine.
 
 Keep the spaces at the start of each line exactly as they are — that is how the file is read.
 Save it and restart the website.
