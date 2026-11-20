@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'हमारे बारे में' : 'About Us')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header('about')}"></header>
+
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <h1 th:text="#{about.title(${hi} ? ${site.nameHi} : ${site.nameEn})}">About Triveni Bricks</h1>
+            <p class="about-lead" th:text="#{about.lead(${site.yearsInBusiness})}">A family brick kiln.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-icon" aria-hidden="true">&#128220;</div>
+                <h2 th:text="#{about.story.title}">Our story</h2>
+                <p th:text="#{about.story.1}">The kiln was started by our family.</p>
+                <p style="margin-bottom:0" th:text="#{about.story.2}">We still do the same things.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" aria-hidden="true">&#128101;</div>
+                <h2 th:text="#{about.who.title}">Who we supply</h2>
+                <ul class="tick-list">
+                    <li th:text="#{about.who.1}">Families building a house</li>
+                    <li th:text="#{about.who.2}">Contractors and builders</li>
+                    <li th:text="#{about.who.3}">Government works</li>
+                    <li th:text="#{about.who.4}">Shops, schools, boundary walls</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="wrap">
+        <div class="grid grid-2">
+            <div class="card">
+                <h2 th:text="#{about.visit}">Visit the kiln</h2>
+                <ul class="contact-list">
+                    <li th:if="${!#strings.isEmpty(site.ownerEn)}">
+                        <span class="contact-ico" aria-hidden="true">&#128100;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{about.owner}">Owner</span>
+                            <span class="contact-value" th:text="${hi} ? ${site.ownerHi} : ${site.ownerEn}">Owner name</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="contact-ico" aria-hidden="true">&#128205;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.address}">Address</span>
+                            <span class="contact-value">
+                                <span th:text="${hi} ? ${site.addressHi} : ${site.addressEn}">Address</span><br>
+                                <span th:text="${hi} ? ${site.cityHi} : ${site.cityEn}">City</span>
+                            </span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="contact-ico" aria-hidden="true">&#128336;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{about.hours}">Open hours</span>
+                            <span class="contact-value" th:text="${hi} ? ${site.openHoursHi} : ${site.openHoursEn}">Hours</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="contact-ico" aria-hidden="true">&#128222;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.phone}">Phone</span>
+                            <span class="contact-value">
+                                <a th:href="'tel:' + ${site.phoneLink}" th:text="${site.phone}">Phone</a>
+                            </span>
+                        </span>
+                    </li>
+                </ul>
+                <div class="map-frame" th:if="${!#strings.isEmpty(site.mapUrl)}">
+                    <iframe th:src="${site.mapUrl}" loading="lazy" title="Kiln location"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+            <div class="card">
+                <h2 th:text="#{trust.title}">Why people buy from us</h2>
+                <ul class="tick-list">
+                    <li><b th:text="#{trust.1.title}">Fully baked</b> &ndash; <span th:text="#{trust.1.text}">text</span></li>
+                    <li><b th:text="#{trust.2.title}">Same rate</b> &ndash; <span th:text="#{trust.2.text}">text</span></li>
+                    <li><b th:text="#{trust.3.title}">Delivery</b> &ndash; <span th:text="#{trust.3.text}">text</span></li>
+                    <li><b th:text="#{trust.4.title}">Count</b> &ndash; <span th:text="#{trust.4.text}">text</span></li>
+                </ul>
+                <div class="btn-row" style="margin-top:20px">
+                    <a class="btn btn-primary" th:href="@{/contact}" th:text="#{nav.contact}">Get a Quote</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: callbar}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

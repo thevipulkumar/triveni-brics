@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'मालिक लॉगिन' : 'Owner Login')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header('admin')}"></header>
+
+<div class="wrap">
+    <div class="card login-box">
+        <h1 th:text="#{admin.login.title}">Owner Login</h1>
+        <p th:text="#{admin.login.subtitle}">This page is only for the kiln owner.</p>
+
+        <div class="alert alert-error" th:if="${loginError}" th:text="#{admin.login.error}">Wrong password.</div>
+
+        <form th:action="@{/admin/login}" method="post">
+            <div class="field">
+                <label for="password" th:text="#{admin.login.password}">Password</label>
+                <input type="password" id="password" name="password" required autofocus autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit" th:text="#{admin.login.button}">Open my dashboard</button>
+        </form>
+
+        <p style="margin:18px 0 0;text-align:center">
+            <a th:href="@{/}" th:text="#{admin.login.back}">Back to website</a>
+        </p>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

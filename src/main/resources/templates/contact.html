@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'रेट पूछें' : 'Get a Quote')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header('contact')}"></header>
+
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <h1 th:text="#{contact.title}">Get a Price Quote</h1>
+            <p th:text="#{contact.subtitle}">Fill this short form.</p>
+        </div>
+
+        <div class="grid grid-2">
+
+            <!-- ===== THE FORM ===== -->
+            <div class="card">
+                <form th:action="@{/contact}" th:object="${enquiry}" method="post" novalidate>
+
+                    <div class="field" th:classappend="${#fields.hasErrors('customerName')} ? 'has-error'">
+                        <label for="customerName">
+                            <span th:text="#{contact.form.name}">Your name</span>
+                            <span class="req" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="customerName" th:field="*{customerName}"
+                               th:placeholder="#{contact.form.name.ph}" autocomplete="name" required>
+                        <span class="err" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Error</span>
+                    </div>
+
+                    <div class="field" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
+                        <label for="phone">
+                            <span th:text="#{contact.form.phone}">Mobile number</span>
+                            <span class="req" aria-hidden="true">*</span>
+                        </label>
+                        <input type="tel" id="phone" th:field="*{phone}" inputmode="tel"
+                               th:placeholder="#{contact.form.phone.ph}" autocomplete="tel" required>
+                        <span class="err" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Error</span>
+                    </div>
+
+                    <div class="field" th:classappend="${#fields.hasErrors('place')} ? 'has-error'">
+                        <label for="place">
+                            <span th:text="#{contact.form.place}">Delivery village / town</span>
+                            <span class="req" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="place" th:field="*{place}"
+                               th:placeholder="#{contact.form.place.ph}" required>
+                        <span class="err" th:if="${#fields.hasErrors('place')}" th:errors="*{place}">Error</span>
+                    </div>
+
+                    <div class="field">
+                        <label for="brickType" th:text="#{contact.form.bricktype}">Which bricks do you need?</label>
+                        <select id="brickType" th:field="*{brickType}">
+                            <option value="" th:text="#{contact.form.bricktype.choose}">Choose a brick type</option>
+                            <option th:each="p : ${products}"
+                                    th:value="${hi} ? ${p.nameHi} : ${p.nameEn}"
+                                    th:text="${hi} ? ${p.nameHi} : ${p.nameEn}">Brick</option>
+                            <option th:value="${hi} ? 'पता नहीं' : 'Not sure'"
+                                    th:text="#{contact.form.bricktype.other}">Not sure</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="quantity" th:text="#{contact.form.quantity}">How many?</label>
+                        <input type="text" id="quantity" th:field="*{quantity}"
+                               th:placeholder="#{contact.form.quantity.ph}">
+                    </div>
+
+                    <div class="field">
+                        <label for="message" th:text="#{contact.form.message}">Anything else?</label>
+                        <textarea id="message" th:field="*{message}"
+                                  th:placeholder="#{contact.form.message.ph}"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <span aria-hidden="true">&#128233;</span>
+                        <span th:text="#{contact.form.submit}">Send my enquiry</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- ===== DIRECT CONTACT ===== -->
+            <div class="card">
+                <h2 th:text="#{contact.direct.title}">Talk to us directly</h2>
+
+                <div class="btn-row" style="margin-bottom:22px">
+                    <a class="btn btn-call btn-block" th:href="'tel:' + ${site.phoneLink}">
+                        <span aria-hidden="true">&#128222;</span>
+                        <span th:text="#{nav.call}">Call Now</span>
+                    </a>
+                    <a class="btn btn-whatsapp btn-block"
+                       th:href="'https://wa.me/' + ${site.whatsappLink}" target="_blank" rel="noopener">
+                        <span aria-hidden="true">&#128172;</span>
+                        <span th:text="#{contact.direct.whatsapp}">WhatsApp us</span>
+                    </a>
+                </div>
+
+                <ul class="contact-list">
+                    <li>
+                        <span class="contact-ico" aria-hidden="true">&#128222;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.phone}">Phone</span>
+                            <span class="contact-value"><a th:href="'tel:' + ${site.phoneLink}" th:text="${site.phone}">Phone</a></span>
+                        </span>
+                    </li>
+                    <li th:if="${!#strings.isEmpty(site.phoneAlt)}">
+                        <span class="contact-ico" aria-hidden="true">&#128241;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.phone2}">Second number</span>
+                            <span class="contact-value"><a th:href="'tel:' + ${site.phoneAltLink}" th:text="${site.phoneAlt}">Phone</a></span>
+                        </span>
+                    </li>
+                    <li th:if="${!#strings.isEmpty(site.email)}">
+                        <span class="contact-ico" aria-hidden="true">&#9993;&#65039;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.email}">Email</span>
+                            <span class="contact-value"><a th:href="'mailto:' + ${site.email}" th:text="${site.email}">Email</a></span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="contact-ico" aria-hidden="true">&#128205;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.address}">Kiln address</span>
+                            <span class="contact-value">
+                                <span th:text="${hi} ? ${site.addressHi} : ${site.addressEn}">Address</span><br>
+                                <span th:text="${hi} ? ${site.cityHi} : ${site.cityEn}">City</span>
+                            </span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="contact-ico" aria-hidden="true">&#128336;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{about.hours}">Open hours</span>
+                            <span class="contact-value" th:text="${hi} ? ${site.openHoursHi} : ${site.openHoursEn}">Hours</span>
+                        </span>
+                    </li>
+                    <li th:if="${!#strings.isEmpty(site.gstin)}">
+                        <span class="contact-ico" aria-hidden="true">&#129534;</span>
+                        <span>
+                            <span class="contact-label" th:text="#{contact.direct.gst}">GSTIN</span>
+                            <span class="contact-value" th:text="${site.gstin}">GST</span>
+                        </span>
+                    </li>
+                </ul>
+
+                <div class="map-frame" th:if="${!#strings.isEmpty(site.mapUrl)}">
+                    <iframe th:src="${site.mapUrl}" loading="lazy" title="Kiln location"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: callbar}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

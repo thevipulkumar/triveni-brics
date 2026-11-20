@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'मालिक डैशबोर्ड' : 'Owner Dashboard')}"></head>
+<body>
+
+<div class="admin-bar">
+    <div class="wrap">
+        <strong th:text="#{admin.title}">Owner Dashboard</strong>
+        <a th:href="${hi} ? '?lang=en' : '?lang=hi'" th:text="#{lang.switch}">हिंदी</a>
+        <a th:href="@{/}" th:text="#{admin.view.site}">View website</a>
+        <a th:href="@{/admin/logout}" th:text="#{admin.logout}">Log out</a>
+    </div>
+</div>
+
+<section class="section">
+    <div class="wrap">
+
+        <div class="stat-row">
+            <div class="stat">
+                <b th:text="${#lists.size(enquiries)}">0</b>
+                <span th:text="#{admin.stats.total}">Total enquiries</span>
+            </div>
+            <div class="stat">
+                <b th:text="${pendingCount}">0</b>
+                <span th:text="#{admin.stats.pending}">Waiting for a call</span>
+            </div>
+        </div>
+
+        <!-- ===== ENQUIRIES ===== -->
+        <h2 th:text="#{admin.tab.enquiries}">Customer enquiries</h2>
+
+        <div class="empty" th:if="${#lists.isEmpty(enquiries)}" th:text="#{admin.enquiries.none}">
+            No enquiries yet.
+        </div>
+
+        <div class="table-scroll" th:unless="${#lists.isEmpty(enquiries)}">
+            <table class="data">
+                <thead>
+                <tr>
+                    <th th:text="#{admin.table.when}">When</th>
+                    <th th:text="#{admin.table.name}">Name</th>
+                    <th th:text="#{admin.table.phone}">Phone</th>
+                    <th th:text="#{admin.table.place}">Place</th>
+                    <th th:text="#{admin.table.brick}">Brick type</th>
+                    <th th:text="#{admin.table.qty}">Quantity</th>
+                    <th th:text="#{admin.table.message}">Message</th>
+                    <th th:text="#{admin.table.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="e : ${enquiries}" th:classappend="${e.handled} ? 'done'">
+                    <td>
+                        <span th:text="${e.createdAtDisplay}">date</span><br>
+                        <span class="pill" th:classappend="${e.handled} ? 'pill-done' : 'pill-wait'"
+                              th:text="${e.handled} ? #{admin.status.handled} : #{admin.status.pending}">status</span>
+                    </td>
+                    <td><b th:text="${e.customerName}">Name</b></td>
+                    <td><a th:href="'tel:' + ${e.phone}" th:text="${e.phone}">Phone</a></td>
+                    <td th:text="${e.place}">Place</td>
+                    <td th:text="${e.brickType}">Brick</td>
+                    <td th:text="${e.quantity}">Qty</td>
+                    <td th:text="${e.message}">Message</td>
+                    <td class="actions">
+                        <a class="btn btn-sm btn-call" th:href="'tel:' + ${e.phone}" th:text="#{admin.action.call}">Call</a>
+                        <a class="btn btn-sm btn-whatsapp" th:href="'https://wa.me/' + ${e.whatsappDigits}"
+                           target="_blank" rel="noopener" th:text="#{admin.action.whatsapp}">WhatsApp</a>
+                        <form th:action="@{/admin/enquiry/{id}/handled(id=${e.id})}" method="post">
+                            <button class="btn btn-sm btn-ghost" type="submit"
+                                    th:text="${e.handled} ? #{admin.action.undone} : #{admin.action.done}">Mark</button>
+                        </form>
+                        <form th:action="@{/admin/enquiry/{id}/delete(id=${e.id})}" method="post"
+                              th:attr="data-confirm=#{admin.action.delete.confirm}">
+                            <button class="btn btn-sm btn-ghost" type="submit" th:text="#{admin.action.delete}">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== PRICES ===== -->
+        <h2 id="prices" style="margin-top:48px" th:text="#{admin.prices.title}">Change brick prices</h2>
+        <p th:text="#{admin.prices.subtitle}">Type the new rate and press Save.</p>
+
+        <div class="table-scroll">
+            <table class="data">
+                <thead>
+                <tr>
+                    <th th:text="#{admin.table.brick}">Brick type</th>
+                    <th th:text="#{products.size}">Size</th>
+                    <th th:text="#{admin.prices.price}">Rate</th>
+                    <th th:text="#{admin.table.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <td>
+                        <b th:text="${hi} ? ${p.nameHi} : ${p.nameEn}">Brick</b>
+                        <span class="pill pill-done" th:if="${p.popular}" th:text="#{admin.prices.ispopular}">Most ordered</span>
+                    </td>
+                    <td>
+                        <span th:text="${p.size}">Size</span><br>
+                        <small th:text="${hi} ? ${p.unitHi} : ${p.unitEn}">per 1000</small>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/product/{id}(id=${p.id})}" method="post" class="price-edit">
+                            <input type="number" name="price" min="0" th:value="${p.price}" required>
+                            <label class="check">
+                                <input type="checkbox" name="available" value="true" th:checked="${p.available}">
+                                <span th:text="#{admin.prices.show}">Show on website</span>
+                            </label>
+                            <button class="btn btn-sm btn-primary" type="submit" th:text="#{admin.prices.save}">Save</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/product/{id}/popular(id=${p.id})}" method="post">
+                            <button class="btn btn-sm btn-ghost" type="submit" th:text="#{admin.prices.popular}">Mark popular</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

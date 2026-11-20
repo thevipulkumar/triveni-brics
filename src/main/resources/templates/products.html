@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'ईंट और रेट' : 'Bricks and Rates')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header('products')}"></header>
+
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <h1 th:text="#{products.title}">Our Bricks & Rates</h1>
+            <p th:text="#{products.subtitle}">Rates are for pick-up from the kiln.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <article class="product" th:each="p : ${products}"
+                     th:classappend="${p.popular} ? 'is-popular' : (${!p.available} ? 'is-out')">
+                <span class="product-tag" th:if="${p.popular}" th:text="#{products.popular}">Most ordered</span>
+                <div class="product-icon" aria-hidden="true" th:text="${p.icon}">&#129521;</div>
+                <h3 th:text="${hi} ? ${p.nameHi} : ${p.nameEn}">First Class Bricks</h3>
+                <p class="product-desc" th:text="${hi} ? ${p.descriptionHi} : ${p.descriptionEn}">Description</p>
+                <div class="product-meta">
+                    <div class="product-size">
+                        <span th:text="#{products.size}">Size</span>
+                        <span th:text="${p.size}">9" x 4" x 3"</span>
+                    </div>
+                    <div class="product-price">
+                        <b th:text="'₹' + ${#numbers.formatInteger(p.price, 1, 'COMMA')}">₹7,000</b>
+                        <small th:text="${hi} ? ${p.unitHi} : ${p.unitEn}">per 1000</small>
+                    </div>
+                </div>
+                <a class="btn btn-primary btn-block"
+                   th:href="@{/contact(type=${hi} ? ${p.nameHi} : ${p.nameEn})}"
+                   th:text="#{products.enquire}">Ask for this</a>
+            </article>
+        </div>
+
+        <div class="note-box">
+            <span aria-hidden="true">&#8505;&#65039;</span>
+            <span th:text="#{products.note}">Prices can change with season.</span>
+        </div>
+
+        <div class="btn-row" style="justify-content:center;margin-top:32px">
+            <a class="btn btn-call" th:href="'tel:' + ${site.phoneLink}">
+                <span aria-hidden="true">&#128222;</span>
+                <span th:text="#{nav.call}">Call Now</span>
+            </a>
+            <a class="btn btn-outline" th:href="@{/contact}" th:text="#{nav.contact}">Get a Quote</a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: callbar}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

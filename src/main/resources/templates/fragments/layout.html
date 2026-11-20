@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:fragment="head(pageTitle)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:with="brand=${hi} ? ${site.nameHi} : ${site.nameEn}"
+           th:text="|${pageTitle} - ${brand}|">Triveni Bricks</title>
+    <meta name="description" th:content="#{footer.tagline}">
+    <meta name="theme-color" content="#9c3d26">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%239c3d26'/><rect x='18' y='30' width='64' height='16' rx='3' fill='%23e8a87c'/><rect x='18' y='54' width='64' height='16' rx='3' fill='%23e8a87c'/></svg>">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" th:fragment="header(page)">
+    <div class="wrap header-inner">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-mark" aria-hidden="true">&#129521;</span>
+            <span class="brand-text">
+                <span class="brand-name" th:text="${hi} ? ${site.nameHi} : ${site.nameEn}">Triveni Bricks</span>
+                <span class="brand-sub" th:text="${hi} ? ${site.cityHi} : ${site.cityEn}">City</span>
+            </span>
+        </a>
+
+        <nav class="nav">
+            <a th:href="@{/}"         th:classappend="${page == 'home'} ? 'active'"     th:text="#{nav.home}">Home</a>
+            <a th:href="@{/products}" th:classappend="${page == 'products'} ? 'active'" th:text="#{nav.products}">Bricks</a>
+            <a th:href="@{/about}"    th:classappend="${page == 'about'} ? 'active'"    th:text="#{nav.about}">About</a>
+            <a th:href="@{/contact}"  th:classappend="${page == 'contact'} ? 'active'"  th:text="#{nav.contact}">Quote</a>
+        </nav>
+
+        <a class="lang-toggle"
+           th:href="${hi} ? '?lang=en' : '?lang=hi'"
+           th:attr="aria-label=#{lang.switch.aria}">
+            <span aria-hidden="true">&#127760;</span>
+            <span th:text="#{lang.switch}">हिंदी</span>
+        </a>
+
+        <button class="menu-btn" type="button" id="menuBtn" aria-label="Menu" aria-expanded="false">&#9776;</button>
+    </div>
+
+    <div class="wrap">
+        <nav class="mobile-nav" id="mobileNav">
+            <a th:href="@{/}"         th:classappend="${page == 'home'} ? 'active'"     th:text="#{nav.home}">Home</a>
+            <a th:href="@{/products}" th:classappend="${page == 'products'} ? 'active'" th:text="#{nav.products}">Bricks</a>
+            <a th:href="@{/about}"    th:classappend="${page == 'about'} ? 'active'"    th:text="#{nav.about}">About</a>
+            <a th:href="@{/contact}"  th:classappend="${page == 'contact'} ? 'active'"  th:text="#{nav.contact}">Quote</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" th:fragment="footer">
+    <div class="wrap">
+        <div class="footer-grid">
+            <div>
+                <h4 th:text="${hi} ? ${site.nameHi} : ${site.nameEn}">Triveni Bricks</h4>
+                <p th:text="#{footer.tagline}">Strong bricks, honest rates.</p>
+                <p th:if="${!#strings.isEmpty(site.gstin)}">
+                    <span th:text="#{contact.direct.gst}">GSTIN</span>:
+                    <span th:text="${site.gstin}"></span>
+                </p>
+            </div>
+            <div>
+                <h4 th:text="#{footer.quicklinks}">Quick links</h4>
+                <ul>
+                    <li><a th:href="@{/}"         th:text="#{nav.home}">Home</a></li>
+                    <li><a th:href="@{/products}" th:text="#{nav.products}">Bricks</a></li>
+                    <li><a th:href="@{/about}"    th:text="#{nav.about}">About</a></li>
+                    <li><a th:href="@{/contact}"  th:text="#{nav.contact}">Quote</a></li>
+                    <li><a th:href="@{/admin/login}" th:text="#{footer.owner.login}">Owner login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 th:text="#{footer.contact}">Contact</h4>
+                <ul>
+                    <li><a th:href="'tel:' + ${site.phoneLink}" th:text="${site.phone}">Phone</a></li>
+                    <li th:if="${!#strings.isEmpty(site.email)}">
+                        <a th:href="'mailto:' + ${site.email}" th:text="${site.email}">Email</a>
+                    </li>
+                    <li th:text="${hi} ? ${site.addressHi} : ${site.addressEn}">Address</li>
+                    <li th:text="${hi} ? ${site.cityHi} : ${site.cityEn}">City</li>
+                    <li th:text="${hi} ? ${site.openHoursHi} : ${site.openHoursEn}">Hours</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>
+                &copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+                <span th:text="${hi} ? ${site.nameHi} : ${site.nameEn}">Triveni Bricks</span>.
+                <span th:text="#{footer.rights}">All rights reserved.</span>
+            </span>
+        </div>
+    </div>
+</footer>
+
+<!-- ============ STICKY CALL BAR (mobile) ============ -->
+<div class="callbar" th:fragment="callbar">
+    <a class="btn btn-call" th:href="'tel:' + ${site.phoneLink}">
+        <span aria-hidden="true">&#128222;</span>
+        <span th:text="#{nav.call}">Call Now</span>
+    </a>
+    <a class="btn btn-whatsapp"
+       th:href="'https://wa.me/' + ${site.whatsappLink}"
+       target="_blank" rel="noopener">
+        <span aria-hidden="true">&#128172;</span>
+        <span th:text="#{nav.whatsapp}">WhatsApp</span>
+    </a>
+</div>
+
+</body>
+</html>

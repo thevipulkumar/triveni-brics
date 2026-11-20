@@ -1,0 +1,87 @@
+# ============================================================
+#  TRIVENI BRICKS - WEBSITE SETTINGS
+#
+#  Change the lines under "site:" to your real details,
+#  then restart the website. Nothing else needs editing.
+#
+#  Keep the spaces at the start of each line exactly as they are.
+# ============================================================
+
+server:
+  port: 8080
+  servlet:
+    session:
+      # Keep the owner's login in a cookie, never in the web address.
+      tracking-modes: cookie
+
+spring:
+  application:
+    name: triveni-bricks
+
+  # ---- DATABASE: enquiries and rates are saved in the data/ folder ----
+  datasource:
+    url: "jdbc:h2:file:./data/trivenibricks;DB_CLOSE_ON_EXIT=FALSE"
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  # ---- LANGUAGE FILES (messages.properties / messages_hi.properties) ----
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+
+  thymeleaf:
+    cache: false
+
+
+# ============================================================
+#  YOUR BUSINESS DETAILS - CHANGE EVERYTHING MARKED XXXXX
+# ============================================================
+site:
+  name-en: Triveni Bricks
+  name-hi: त्रिवेणी ब्रिक्स
+
+  owner-en: Shri XXXXXXXX
+  owner-hi: श्री XXXXXXXX
+
+  # Phone numbers. The first one is used for the big "Call Now" buttons.
+  phone: "+91 8083217096"
+  # A second number, if there is one. Leave as "" to hide it from the site.
+  phone-alt: ""
+  whatsapp: "+91 8083217096"
+  # Leave as "" to hide the email line from the site.
+  email: ""
+
+  address-en: Sadar Road, Near Panch Mandir
+  address-hi: सदर रोड, पंच मंदिर के पास
+  # TODO: add your district and state after the village name, in both lines.
+  city-en: Okani Village
+  city-hi: ओकनी गाँव
+
+  # Leave empty if you do not have a GST number.
+  gstin: ""
+
+  # The year the kiln started. The site works out "X years in business" from this.
+  established-year: "1998"
+
+  open-hours-en: Monday to Sunday, 7:00 AM - 7:00 PM
+  open-hours-hi: सोमवार से रविवार, सुबह 7:00 - शाम 7:00
+
+  # To show the kiln on a map: Google Maps -> Share -> Embed a map,
+  # then paste only the link from src="..." between the quotes below.
+  map-url: ""
+
+  # Password for the owner's dashboard at /admin.
+  #
+  # This file is in a public GitHub repository, so DO NOT put the real
+  # password on the line below. Instead, before starting the website, run:
+  #
+  #     export TRIVENI_ADMIN_PASSWORD="your-real-password"
+  #
+  # That setting wins over the line below and is never saved to GitHub.
+  admin-password: "${TRIVENI_ADMIN_PASSWORD:change-me-before-going-online}"

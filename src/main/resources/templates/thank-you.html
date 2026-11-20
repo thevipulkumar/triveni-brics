@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'धन्यवाद' : 'Thank You')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header('contact')}"></header>
+
+<section class="section">
+    <div class="wrap">
+        <div class="thanks">
+            <div class="thanks-tick" aria-hidden="true">&#10003;</div>
+            <h1 th:text="#{thanks.title(${savedName} ?: '')}">Thank you!</h1>
+            <p th:text="#{thanks.text}">We will call you back.</p>
+            <p><b th:text="#{thanks.urgent}">In a hurry? Call us right now:</b></p>
+            <div class="btn-row" style="justify-content:center">
+                <a class="btn btn-call" th:href="'tel:' + ${site.phoneLink}">
+                    <span aria-hidden="true">&#128222;</span>
+                    <span th:text="${site.phone}">Phone</span>
+                </a>
+                <a class="btn btn-whatsapp" th:href="'https://wa.me/' + ${site.whatsappLink}" target="_blank" rel="noopener">
+                    <span aria-hidden="true">&#128172;</span>
+                    <span th:text="#{nav.whatsapp}">WhatsApp</span>
+                </a>
+            </div>
+            <p style="margin-top:28px">
+                <a class="btn btn-ghost" th:href="@{/}" th:text="#{thanks.home}">Back to Home</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: callbar}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

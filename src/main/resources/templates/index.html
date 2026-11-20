@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head th:replace="~{fragments/layout :: head(${hi} ? 'होम' : 'Home')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header('home')}"></header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="wrap">
+        <h1 th:text="#{hero.tagline}">Strong bricks. Honest rates.</h1>
+        <p class="hero-sub" th:text="#{hero.subtitle(${site.establishedYear})}">Supplying bricks since 1998.</p>
+        <div class="btn-row">
+            <a class="btn btn-primary" th:href="@{/contact}" th:text="#{hero.cta.primary}">Get a Price Quote</a>
+            <a class="btn btn-call" th:href="'tel:' + ${site.phoneLink}">
+                <span aria-hidden="true">&#128222;</span>
+                <span th:text="#{hero.cta.secondary}">Call Us</span>
+            </a>
+        </div>
+        <div class="hero-badges">
+            <div class="hero-badge">
+                <span aria-hidden="true">&#127941;</span>
+                <span><b th:text="${site.yearsInBusiness}">25</b>
+                      <span th:text="#{hero.badge.years}">years</span></span>
+            </div>
+            <div class="hero-badge">
+                <span aria-hidden="true">&#128666;</span>
+                <span th:text="#{hero.badge.delivery}">Delivery at your site</span>
+            </div>
+            <div class="hero-badge">
+                <span aria-hidden="true">&#128293;</span>
+                <span th:text="#{hero.badge.quality}">Kiln-fresh quality</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== WHY US ===== -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-head">
+            <h2 th:text="#{trust.title}">Why people buy from us</h2>
+        </div>
+        <div class="grid grid-4">
+            <div class="card">
+                <div class="card-icon" aria-hidden="true">&#128293;</div>
+                <h3 th:text="#{trust.1.title}">Fully baked bricks</h3>
+                <p th:text="#{trust.1.text}">Every lot is checked.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" aria-hidden="true">&#128181;</div>
+                <h3 th:text="#{trust.2.title}">Same rate for everyone</h3>
+                <p th:text="#{trust.2.text}">One clear rate list.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" aria-hidden="true">&#128666;</div>
+                <h3 th:text="#{trust.3.title}">Delivery to your site</h3>
+                <p th:text="#{trust.3.text}">Delivered to your plot.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" aria-hidden="true">&#9989;</div>
+                <h3 th:text="#{trust.4.title}">Count you can check</h3>
+                <p th:text="#{trust.4.text}">Counted in front of you.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== RATE LIST ===== -->
+<section class="section section-alt">
+    <div class="wrap">
+        <div class="section-head">
+            <h2 th:text="#{products.title}">Our Bricks & Rates</h2>
+            <p th:text="#{products.subtitle}">Rates are for pick-up from the kiln.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <article class="product" th:each="p : ${products}"
+                     th:classappend="${p.popular} ? 'is-popular'">
+                <span class="product-tag" th:if="${p.popular}" th:text="#{products.popular}">Most ordered</span>
+                <div class="product-icon" aria-hidden="true" th:text="${p.icon}">&#129521;</div>
+                <h3 th:text="${hi} ? ${p.nameHi} : ${p.nameEn}">First Class Bricks</h3>
+                <p class="product-desc" th:text="${hi} ? ${p.descriptionHi} : ${p.descriptionEn}">Description</p>
+                <div class="product-meta">
+                    <div class="product-size">
+                        <span th:text="#{products.size}">Size</span>
+                        <span th:text="${p.size}">9" x 4" x 3"</span>
+                    </div>
+                    <div class="product-price">
+                        <b th:text="'₹' + ${#numbers.formatInteger(p.price, 1, 'COMMA')}">₹7,000</b>
+                        <small th:text="${hi} ? ${p.unitHi} : ${p.unitEn}">per 1000</small>
+                    </div>
+                </div>
+                <a class="btn btn-outline btn-block"
+                   th:href="@{/contact(type=${hi} ? ${p.nameHi} : ${p.nameEn})}"
+                   th:text="#{products.enquire}">Ask for this</a>
+            </article>
+        </div>
+
+        <div class="note-box">
+            <span aria-hidden="true">&#8505;&#65039;</span>
+            <span th:text="#{products.note}">Prices can change with season.</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== BRICK CALCULATOR ===== -->
+<section class="section" id="calculator">
+    <div class="wrap">
+        <div class="section-head">
+            <h2 th:text="#{calc.title}">Rough brick calculator</h2>
+            <p th:text="#{calc.subtitle}">Enter the wall size.</p>
+        </div>
+        <div class="calc">
+            <div class="calc-row">
+                <div class="field">
+                    <label for="calcLen" th:text="#{calc.length}">Wall length (feet)</label>
+                    <input type="number" id="calcLen" min="0" step="0.5" inputmode="decimal" placeholder="20">
+                </div>
+                <div class="field">
+                    <label for="calcHt" th:text="#{calc.height}">Wall height (feet)</label>
+                    <input type="number" id="calcHt" min="0" step="0.5" inputmode="decimal" placeholder="10">
+                </div>
+            </div>
+            <div class="field">
+                <label for="calcThick" th:text="#{calc.thickness}">Wall thickness</label>
+                <select id="calcThick">
+                    <option value="9" th:text="#{calc.thickness.9}">9 inch</option>
+                    <option value="4.5" th:text="#{calc.thickness.4}">4.5 inch</option>
+                </select>
+            </div>
+            <button class="btn btn-primary btn-block" type="button" id="calcBtn" th:text="#{calc.button}">Calculate</button>
+            <div class="calc-out" id="calcOut" hidden
+                 th:attr="data-tpl=#{calc.result},data-note=#{calc.result.note},data-invalid=#{calc.invalid}"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section section-alt">
+    <div class="wrap section-head">
+        <h2 th:text="#{contact.title}">Get a Price Quote</h2>
+        <p th:text="#{contact.subtitle}">Fill the form and we will call back.</p>
+        <div class="btn-row" style="justify-content:center;margin-top:20px">
+            <a class="btn btn-primary" th:href="@{/contact}" th:text="#{contact.form.submit}">Send my enquiry</a>
+            <a class="btn btn-whatsapp" th:href="'https://wa.me/' + ${site.whatsappLink}" target="_blank" rel="noopener">
+                <span aria-hidden="true">&#128172;</span>
+                <span th:text="#{contact.direct.whatsapp}">WhatsApp us</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: callbar}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
